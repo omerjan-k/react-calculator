@@ -33,6 +33,11 @@ body {
   background: #ec9c07;
   color: white;
   border-radius: 50%;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: rgb(46, 44, 43);
 }
 
 .result {
