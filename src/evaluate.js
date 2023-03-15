@@ -1,4 +1,4 @@
-function evaluate(input) {
+export function evaluate(input) {
   const operators = ["+", "-", "/", "*"];
 
   function applyOperator(operator, a, b) {
@@ -16,7 +16,29 @@ function evaluate(input) {
     }
   }
 
-  if (input[input.length - 2] === input[input.length - 1]) {
+  function getCalculatedResult() {
+    let expr = input.slice(0, -1);
+
+    let parts = expr.split(/([+\-*/])/g).map((part) => part.trim());
+    console.log("parts:", parts);
+
+    let result = Number(parts[0]);
+    console.log("result:", result);
+    for (let i = 1; i < parts.length; i += 2) {
+      let operator = parts[i];
+      console.log("operator:", operator);
+      let operand = Number(parts[i + 1]);
+      console.log("operand:", operand);
+      result = applyOperator(operator, result, operand);
+    }
+    return result.toString();
+  }
+
+  if (input[0] === "*" || input[0] === "/") {
+    input = input.slice(1, -1);
+  }
+
+  if (input[input.length - 2] === "." && input[input.length - 1] === ".") {
     input = input.slice(0, -1);
   }
 
@@ -27,27 +49,14 @@ function evaluate(input) {
     input = input.slice(0, -1);
   }
 
-  if (input[input.length - 1] === "=" && input.length >= 3) {
-    for (const operator of operators) {
-      if (input.includes(operator)) {
-        const [a, b] = input.slice(0, -1).split(operator).map(Number);
-        const result = applyOperator(operator, a, b);
-        return result.toString();
-      }
-    }
+  // Evaluate expression if ends with "="
+  if (input[input.length - 1] === "=" && input.length > 2) {
+    return getCalculatedResult();
   }
-
-  if (operators.includes(input[input.length - 1]) && input.length >= 4) {
-    for (const operator of operators) {
-      if (input.slice(0, -1).includes(operator)) {
-        const [a, b] = input.slice(0, -1).split(operator).map(Number);
-        const result = applyOperator(operator, a, b);
-        return result.toString() + input[input.length - 1];
-      }
-    }
+  // Evaluate expression if ends with en operator in the operators
+  if (operators.includes(input[input.length - 1]) && input.length > 2) {
+    return getCalculatedResult() + input[input.length - 1];
   }
 
   return input;
 }
-
-export default evaluate;

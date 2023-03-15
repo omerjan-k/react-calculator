@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import evaluate from "./evaluate";
+import { evaluate } from "./evaluate";
 import "./App.css";
 
 function App() {
